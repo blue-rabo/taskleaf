@@ -1,8 +1,12 @@
 class TasksController < ApplicationController
+  # 一覧画面
   def index
+    @tasks = Task.all
   end
 
+  # 詳細画面
   def show
+    @task = Task.find(params[:id])
   end
 
   # 新規登録画面
