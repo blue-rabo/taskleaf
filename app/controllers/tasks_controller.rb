@@ -1,7 +1,15 @@
+# コントローラークラス
 class TasksController < ApplicationController
   # 一覧画面
   def index
-    @tasks = Task.all
+    # DBに保存されている全てのタスクデータを取得
+    @task = Task.all
+  end
+
+  # 新規登録画面
+  def new
+    # 新しいオブジェクトを生成
+    @task = Task.new
   end
 
   # 詳細画面
@@ -9,15 +17,9 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
 
-  # 新規登録画面
-  def new
-    # オブジェクト生成
-    @task = Task.new
-  end
-
   # 登録
   def create
-    # オブジェクト生成
+    # 安全化されたtaskパラメータを使ってオブジェクト生成
     task = Task.new(task_params)
     # DBに保存
     task.save!
@@ -25,7 +27,30 @@ class TasksController < ApplicationController
     redirect_to tasks_url, notice: "タスク「#{task.name}」を登録しました。"
   end
 
+  # 編集
   def edit
+    # 編集対象のオブジェクトを取得
+    @task = Task.find(params[:id])
+  end
+
+  # 更新
+  def update
+    # 編集対象のオブジェクトを取得
+    task = Task.find(params[:id])
+    # DBに保存
+    task.update!(task_params)
+    # 一覧画面にリダイレクト
+    redirect_to tasks_url, notice: "タスク「#{task.name}」を更新しました。"
+  end
+
+  # 削除
+  def destroy
+    # 削除対象のオブジェクトを取得
+    task = Task.find(params[:id])
+    # DBから削除
+    task.destroy
+    # 一覧画面にリダイレクト
+    redirect_to tasks_url, notice: "タスク「#{task.name}」を削除しました。"
   end
 
   private
