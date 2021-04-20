@@ -20,11 +20,15 @@ class TasksController < ApplicationController
   # 登録
   def create
     # 安全化されたtaskパラメータを使ってオブジェクト生成
-    task = Task.new(task_params)
-    # DBに保存
-    task.save!
-    # 一覧画面にリダイレクト
-    redirect_to tasks_url, notice: "タスク「#{task.name}」を登録しました。"
+    @task = Task.new(task_params)
+    # 検証が成功した場合DBに保存
+    if @task.save
+      # 一覧画面にリダイレクト
+      redirect_to @task, notice: "タスク「#{@task.name}」を登録しました。"
+    # 検証エラーの場合
+    else
+      # 新規登録画面を再び表示
+      render :new
   end
 
   # 編集
